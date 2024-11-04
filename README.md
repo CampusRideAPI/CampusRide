@@ -182,6 +182,5 @@ git checkout correct-branch
 
 ## Need Help?
 
-- Ask team members directly
-- Create an issue on GitHub
-- Ask during team meetings
+- Ask Aleksi about anything directly
+- ?Ask during team meetings?
