@@ -1,6 +1,7 @@
-# Getting Started with Our Project
+# Getting Started with CampusRide
 
 ## Prerequisites
+
 - Git installed on your computer
 - Python 3.x installed
 - Your GitHub account added to the project
@@ -8,45 +9,51 @@
 ## Initial Setup
 
 ### 1. Clone the Repository
-```bash
-# Open terminal/command prompt and navigate to where you want the project
-cd your/preferred/location
 
+```bash
 # Clone the repository
-git clone [repository-URL]
-cd [project-name]
+git clone https://github.com/CampusRideAPI/CampusRideAPI
+cd CampusRideAPI
 ```
 
-### 2. Set Up Your Development Environment
+### 2. Set Up Development Environment
 
 #### Windows:
+
 ```bash
-# Create a virtual environment
+# Backend setup
+cd backend
 python -m venv venv
-
-# Activate it
 venv\Scripts\activate
+pip install -r requirements.txt
 
-# Install dependencies
+# Frontend setup (in new terminal)
+cd frontend
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 #### Mac/Linux:
+
 ```bash
-# Create a virtual environment
+# Backend setup
+cd backend
 python -m venv venv
-
-# Activate it
 source venv/bin/activate
+pip install -r requirements.txt
 
-# Install dependencies
+# Frontend setup (in new terminal)
+cd frontend
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ## Working on Features
 
 ### 1. Create a Feature Branch
-Always create a new branch when working on a feature:
+
 ```bash
 # Make sure you're on main and it's up to date
 git checkout main
@@ -57,21 +64,21 @@ git checkout -b feature/your-feature-name
 ```
 
 Branch naming convention:
+
 - Use `feature/` prefix
-- Use descriptive names in kebab-case
+- Use descriptive names
 - Examples:
-  - `feature/add-login-page`
-  - `feature/fix-database-connection`
-  - `feature/update-user-profile`
+  - `feature/add-rides`
+  - `feature/update-rides`
+  - `feature/delete-rides`
 
 ### 2. Making Changes
+
 ```bash
 # Check what files you've changed
 git status
 
 # Add your changes
-git add filename.py
-# OR add all changes
 git add .
 
 # Commit your changes
@@ -82,47 +89,82 @@ git push origin feature/your-feature-name
 ```
 
 ### 3. Creating a Pull Request
+
 1. Go to GitHub repository
 2. Click "Pull requests"
 3. Click "New pull request"
 4. Select your feature branch
-5. Add description of your changes
-6. Create pull request
+5. Create pull request
 
 ## Running the Project
 
 ### Start the Backend:
+
 ```bash
-# Make sure you're in the project directory and virtual environment is activated
 cd backend
-uvicorn main:app --reload
+# Make sure venv is activated
+uvicorn app.main:app --reload
 ```
+
 Backend will run at: http://localhost:8000
 
 ### Start the Frontend:
+
 ```bash
-# In a new terminal, activate virtual environment
 cd frontend
+# Make sure venv is activated
 flask run
 ```
+
 Frontend will run at: http://localhost:5000
+
+## Project Structure
+
+```
+campusride/
+├── api/
+│   └── openapi.yaml        # API design document
+├── backend/
+│   ├── app/
+│   │   ├── main.py         # FastAPI application
+│   │   ├── models.py       # SQLAlchemy models
+│   │   ├── schemas.py      # Pydantic schemas
+│   │   ├── database.py     # Database configuration
+│   │   ├── crud.py         # Database operations
+│   │   └── errors.py       # Error handling
+│   └── requirements.txt
+├── frontend/
+│   ├── app/
+│   │   ├── templates/
+│   │   │   ├── base.html
+│   │   │   ├── index.html
+│   │   │   ├── rides_list.html
+│   │   │   └── create_ride.html
+│   │   ├── static/
+│   │   │   └── style.css
+│   │   └── app.py
+│   └── requirements.txt
+└── README.md
+```
 
 ## Common Issues and Solutions
 
-### "ModuleNotFoundError"
+### ModuleNotFoundError
+
 - Make sure virtual environment is activated
 - Run `pip install -r requirements.txt` again
 
 ### Git Issues
-1. "Cannot push to remote":
+
+1. Cannot push to remote:
+
 ```bash
-# Pull latest changes first
 git pull origin main
-# Try pushing again
 git push origin your-branch-name
 ```
 
-2. "Wrong branch":
+2. Wrong branch:
+
 ```bash
 # Check current branch
 git branch
@@ -130,29 +172,16 @@ git branch
 git checkout correct-branch
 ```
 
-## Tips for Successful Development
+## Tips
+
 1. Always pull latest changes before creating new branch
 2. Keep commits small and focused
 3. Write clear commit messages
 4. Test your changes before pushing
-5. Ask for help if you're stuck!
-
-## Project Structure
-```
-project/
-├── backend/            # FastAPI backend
-│   ├── main.py
-│   └── requirements.txt
-├── frontend/           # Flask frontend
-│   ├── app.py
-│   └── requirements.txt
-└── README.md
-```
+5. Ask for help if needed
 
 ## Need Help?
-- Check project documentation
-- Ask in team chat
+
+- Ask team members directly
 - Create an issue on GitHub
 - Ask during team meetings
-
-Remember: No question is too simple to ask! We're all here to learn and help each other.
