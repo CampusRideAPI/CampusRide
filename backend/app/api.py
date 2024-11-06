@@ -10,7 +10,7 @@ router = APIRouter()
 
 """API ENDPOINT TO GET ALL RIDES"""
 @router.post("/rides/", response_model=List[schemas.Ride])
-def create_ride(db: Session = Depends(get_db)):
+def get_rides(db: Session = Depends(get_db)):
     rides = crud.get_rides(db)
     return rides
 
