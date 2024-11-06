@@ -126,12 +126,11 @@ campusride/
 │   └── openapi.yaml        # API design document
 ├── backend/
 │   ├── app/
-│   │   ├── main.py         # FastAPI application
+│   │   ├── main.py         # FastAPI app initialization
 │   │   ├── models.py       # SQLAlchemy models
 │   │   ├── schemas.py      # Pydantic schemas
-│   │   ├── database.py     # Database configuration
-│   │   ├── crud.py         # Database operations
-│   │   └── errors.py       # Error handling
+│   │   ├── database.py     # Database configuration + operations
+│   │   └── api.py          # API endpoints
 │   └── requirements.txt
 ├── frontend/
 │   ├── app/
@@ -145,6 +144,64 @@ campusride/
 │   │   └── app.py
 │   └── requirements.txt
 └── README.md
+```
+
+## Setting Up Database Migrations
+
+First, make sure you're in the backend directory:
+
+```bash
+cd backend
+```
+
+Initialize Alembic for migrations:
+
+```bash
+alembic init alembic
+```
+
+Create your first migration:
+
+```bash
+alembic revision --autogenerate -m "Initial migration"
+```
+
+Run the migrations:
+
+```bash
+alembic upgrade head
+```
+
+### Common Migration Commands
+
+Create a new migration:
+
+```bash
+alembic revision --autogenerate -m "Describe your changes"
+```
+
+Apply all pending migrations:
+
+```bash
+alembic upgrade head
+```
+
+Roll back one migration:
+
+```bash
+alembic downgrade -1
+```
+
+View migration history:
+
+```bash
+alembic history
+```
+
+Check current migration version:
+
+```bash
+alembic current
 ```
 
 ## Common Issues and Solutions
