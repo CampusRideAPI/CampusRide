@@ -135,12 +135,12 @@ campusride/
 ├── frontend/
 │   ├── app/
 │   │   ├── templates/
-│   │   │   ├── base.html
-│   │   │   ├── index.html
-│   │   │   ├── rides_list.html
-│   │   │   └── create_ride.html
+│   │   │   ├── base.html             # Optional, only for rendering and reducing copypaste code.
+│   │   │   ├── index.html            # Optional, ride_list.html can be landing page.
+│   │   │   ├── rides_list.html       # List all rides + delete button
+│   │   │   └── create_ride.html      # Form with all required fields
 │   │   ├── static/
-│   │   │   └── style.css
+│   │   │   └── style.css             # Optional
 │   │   └── app.py
 │   └── requirements.txt
 └── README.md
