@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field 
+from pydantic import BaseModel, Field, validator
 from pydantic.types import conint
 
 class RideBase(BaseModel):
@@ -28,6 +28,9 @@ class Ride(RideBase):
     
     class Config:
         orm_mode: True
+        json_encoders = {
+            datetime: lambda v: v.strftime("%d.%m.%Y %H:%M") # Date format for JSON
+        }
         
 class GetRidesSchema(BaseModel):
     rides: list[Ride]
