@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.models import Ride
 
