@@ -30,9 +30,9 @@ REGULAR_DRIVERS = [
 def create_structured_dummy_rides():
     db = SessionLocal()
     start_date = datetime.now()
-    """Dummy dataa 7 päiväksi"""
+    """Dummy dataa 2 päiväksi"""
     try:
-        for day in range(7):
+        for day in range(2):
             for driver in REGULAR_DRIVERS:
                 for route_index in driver["routes"]:
                     route = COMMON_ROUTES[route_index]
