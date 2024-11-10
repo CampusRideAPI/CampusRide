@@ -126,4 +126,3 @@ def book_a_ride(
     return db_booking
         
     
-    """TODO BUGFIX - 500 error when booking a ride with no available seats"""
