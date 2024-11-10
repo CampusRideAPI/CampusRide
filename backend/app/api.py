@@ -109,7 +109,7 @@ def book_a_ride(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Ride with ID {ride_id} not found"
         )
-    if ride.available_seats == 0:
+    if ride.available_seats <= 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="No available seats for this ride"
@@ -126,4 +126,4 @@ def book_a_ride(
     return db_booking
         
     
-    
+    """TODO BUGFIX - 500 error when booking a ride with no available seats"""
