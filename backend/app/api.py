@@ -9,6 +9,7 @@ from typing import Optional
 
 router = APIRouter()
 """API ENDPOINTS"""
+
 """RIDE SPECIFIC ENDPOINTS"""
 @router.get(
     "/rides",

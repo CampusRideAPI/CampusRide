@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -14,14 +14,14 @@ class Ride(Base):
     driver_name = Column(String)
     created_at = Column(DateTime, default=func.now()) 
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
-    
     bookings = relationship("Booking", back_populates="ride")
+    
     
 class Booking(Base):
     __tablename__ = "bookings"
     
     id = Column(Integer, primary_key=True, index=True)
-    ride_id = Column(Integer, index=True)
+    ride_id = Column(Integer, ForeignKey("rides.id"))
     passenger_name = Column(String)
     created_at = Column(DateTime, default=func.now())
     ride = relationship("Ride", back_populates="bookings")
