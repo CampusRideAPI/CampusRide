@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.sql import func
 from .database import Base
 
 class Ride(Base):
@@ -10,6 +11,8 @@ class Ride(Base):
     departure_time = Column(DateTime)
     available_seats = Column(Integer)
     driver_name = Column(String)
+    created_at = Column(DateTime, default=func.now()) 
+    updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
 
     def dict(self):
         return {
