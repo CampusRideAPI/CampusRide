@@ -10,6 +10,7 @@ from typing import Optional
 router = APIRouter()
 """API ENDPOINTS"""
 
+"""RIDE SPECIFIC ENDPOINTS"""
 @router.get(
     "/rides",
     response_model=schemas.GetRidesSchema,
@@ -91,6 +92,38 @@ def delete_ride(ride_id: int, db: Session = Depends(get_db)):
     db.delete(ride)
     db.commit()
     return
+
+
+"""BOOKING SPECIFIC ENDPOINTS"""
+
+@router.post(
+    "/rides/{ride_id}/book", response_model=schemas.Booking)
+
+def book_a_ride(
+    ride_id: int,
+    booking: schemas.BookingCreate,
+    db: Session = Depends(get_db)):
+    ride = db.query(models.Ride).filter(models.Ride.id == ride_id).first()
+    if not ride:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Ride with ID {ride_id} not found"
+        )
+    if ride.available_seats == 0:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No available seats for this ride"
+        )
+        
+    db_booking = models.Booking(
+        ride_id=ride_id,
+        passenger_name = booking.passenger_name
+    )
+    ride.available_seats -= 1
+    db.add(db_booking)
+    db.commit()
+    db.refresh(db_booking)
+    return db_booking
         
     
     

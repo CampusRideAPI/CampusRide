@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field 
+from pydantic import BaseModel, Field
 from pydantic.types import conint
 
 class RideBase(BaseModel):
@@ -28,7 +28,20 @@ class Ride(RideBase):
     
     class Config:
         orm_mode: True
+        json_encoders = {
+            datetime: lambda v: v.strftime("%d.%m.%Y %H:%M") # Date format for JSON
+        }
         
 class GetRidesSchema(BaseModel):
     rides: list[Ride]
     
+class BookingCreate(BaseModel):
+    passenger_name: str = Field(..., min_length=2, max_length=30)
+    
+class Booking(BookingCreate):
+    id: int
+    ride_id: int
+    created_at: datetime
+    
+    class Config:
+        orm_mode: True
