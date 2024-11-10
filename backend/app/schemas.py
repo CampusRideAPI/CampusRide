@@ -32,3 +32,13 @@ class Ride(RideBase):
 class GetRidesSchema(BaseModel):
     rides: list[Ride]
     
+class CreateBooking(BaseModel):
+    passenger_name: str = Field(..., min_length=2, max_length=30)
+    
+class Booking(CreateBooking):
+    id: int
+    ride_id: int
+    created_at: datetime
+    
+    class Config:
+        orm_mode: True
