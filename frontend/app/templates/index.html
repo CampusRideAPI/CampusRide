@@ -1,42 +1,173 @@
 <!DOCTYPE html>
-<html lang="fi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Kuvaus sivusta">
-    <title>CampusRide</title>
-    <link rel="stylesheet" href="styles.css"> 
-</head>
-<body>
-    <header>
-        <h1>Otsikko</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Koti</a></li>
-                <li><a href="#about">Tietoa</a></li>
-                <li><a href="#contact">Yhteys</a></li>
-            </ul>
-        </nav>
-    </header>
+<html>
+  <head>
+    <title>CampusRide - Student Ride Sharing</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+  </head>
+  <body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow">
+      <div class="container px-6 py-4 mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="text-xl font-bold text-blue-600">CampusRide</div>
+          <div>
+            <a
+              href="{{ url_for('list_rides') }}"
+              class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              View Rides
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-    <main>
-        <section id="home">
-            <h2>Helppoo hauskaa kivaa</p>
-        </section>
+    <!-- Hero Section -->
+    <div class="bg-white">
+      <div class="container px-6 py-16 mx-auto">
+        <div class="flex flex-col items-center justify-between md:flex-row">
+          <div class="mb-8 md:w-1/2 md:mb-0">
+            <h1 class="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">
+              Share Rides with Fellow Students
+            </h1>
+            <p class="mb-8 text-lg text-gray-600">
+              Save money, reduce carbon footprint, and make new friends. Join
+              the campus community in making transportation easier and more
+              sustainable.
+            </p>
+            <div class="space-x-4">
+              <a
+                href="{{ url_for('create_ride') }}"
+                class="px-6 py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              >
+                Offer a Ride
+              </a>
+              <a
+                href="{{ url_for('list_rides') }}"
+                class="px-6 py-3 text-gray-800 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+              >
+                Find a Ride
+              </a>
+            </div>
+          </div>
+          <div class="md:w-1/2">
+            <!-- Placeholder for illustration -->
+            <div class="p-8 text-center bg-gray-200 rounded-lg">
+              <svg
+                class="w-full h-64 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <section id="about">
-            <h2>Tietoa meistä</h2>
-            <p>Tämä osio kertoo lisätietoja sivustosta tai yrityksestä.</p>
-        </section>
+    <!-- Features Section -->
+    <div class="py-16 bg-gray-50">
+      <div class="container px-6 mx-auto">
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div class="p-6 bg-white rounded-lg shadow-sm">
+            <div class="mb-4 text-blue-600">
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">Save Money</h3>
+            <p class="text-gray-600">
+              Share travel costs with other students and make your commute more
+              affordable.
+            </p>
+          </div>
 
-        <section id="contact">
-            <h2>Ota yhteyttä</h2>
-            <p>Voit ottaa yhteyttä sähköpostilla osoitteeseen <a href="mailto:esimerkki@sivu.com">esimerkki@sivu.com</a>.</p>
-        </section>
-    </main>
+          <div class="p-6 bg-white rounded-lg shadow-sm">
+            <div class="mb-4 text-blue-600">
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                />
+              </svg>
+            </div>
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+              Eco-Friendly
+            </h3>
+            <p class="text-gray-600">
+              Reduce your carbon footprint by sharing rides with others going
+              the same way.
+            </p>
+          </div>
 
-    <footer>
-        <p>&copy; 2024 Yrityksesi nimi</p>
+          <div class="p-6 bg-white rounded-lg shadow-sm">
+            <div class="mb-4 text-blue-600">
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+              Meet People
+            </h3>
+            <p class="text-gray-600">
+              Connect with fellow students and make your commute more social and
+              enjoyable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white">
+      <div class="container px-6 py-8 mx-auto">
+        <div class="text-center text-gray-600">
+          <p>© 2024 CampusRide. All rights reserved.</p>
+        </div>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
