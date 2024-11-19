@@ -72,3 +72,8 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 .DS_Store
+
+package-lock.json
+yarn.lock
+package.json
+node_modules/

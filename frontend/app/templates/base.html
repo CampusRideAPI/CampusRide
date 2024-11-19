@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}CampusRide{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-800 text-white py-4 shadow-md">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <a href="{{ url_for('list_rides') }}" class="text-xl font-bold"
+          >CampusRide</a
+        >
+        <nav>
+          <ul class="flex space-x-4">
+            <li>
+              <a href="{{ url_for('index') }}" class="hover:text-blue-200"
+                >Main page</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('list_rides') }}" class="hover:text-blue-200"
+                >Rides</a
+              >
+            </li>
+            <li>
+              <a href="{{ url_for('create_ride') }}" class="hover:text-blue-200"
+                >Create Ride</a
+              >
+            </li>
+            <!-- Add more navigation links as needed -->
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 container mx-auto px-4 py-8">
+      {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-6">
+      <div class="container mx-auto px-4 flex justify-between items-center">
+        <p>&copy; 2024 CampusRide. Rosa, Jonna, Aleksi. All rights reserved.</p>
+        <nav>
+          <ul class="flex space-x-4">
+            <li><a href="#" class="hover:text-gray-400">About</a></li>
+            <li><a href="#" class="hover:text-gray-400">Contact</a></li>
+            <li><a href="#" class="hover:text-gray-400">Privacy Policy</a></li>
+            <!-- Add more footer links as needed -->
+          </ul>
+        </nav>
+      </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

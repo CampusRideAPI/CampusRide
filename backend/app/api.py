@@ -18,11 +18,11 @@ router = APIRouter()
 )
 def get_rides(limit: Optional[int] = None,
     db: Session = Depends(get_db)):
-    query = db.query(models.Ride)
+    query = db.query(models.Ride)   # Query all rides
     if limit:
-        query = query.limit(limit)
-    rides = query.all()
-    return {"rides": rides}
+        query = query.limit(limit)  # Limit the number of rides *OPTIONAL*
+    rides = query.all()     # Get all rides
+    return {"rides": rides}     # Return rides list
 
 
 @router.post(
@@ -34,13 +34,14 @@ def create_ride(
     payload: schemas.RideCreate,
     db: Session = Depends(get_db)
 ):
-    db_ride = models.Ride(**payload.model_dump())
-    db.add(db_ride)
-    db.commit()
-    db.refresh(db_ride)
-    return db_ride
+    db_ride = models.Ride(**payload.model_dump())   # Convert payload to model
+    db.add(db_ride)    # Add ride to database
+    db.commit()     # Commit changes
+    db.refresh(db_ride)     # Refresh the database
+    return db_ride    # Return the ride
 
-@router.get(
+@router.get( 
+""" Returns specific ride details. """
     "/rides/{ride_id}",
     response_model=schemas.Ride,
     status_code=status.HTTP_200_OK
@@ -69,7 +70,7 @@ def update_ride(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Ride with ID {ride_id} not found"
         )
-        
+    """ Update only provided fields"""
     for key, value in ride_details.model_dump(exclude_unset=True).items():
         setattr(ride, key, value)
     db.commit()

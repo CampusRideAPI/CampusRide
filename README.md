@@ -113,9 +113,15 @@ Backend will run at: http://localhost:8000
 ```bash
 cd frontend
 # Make sure venv is activated
-flask run
+python run.py
 ```
-
+### Seeding for dummy data
+```bash
+# To run seed:
+# Make sure you are on backend
+python seed.py
+# If everything went well you well get notification. 
+```
 Frontend will run at: http://localhost:5000
 
 ## Project Structure

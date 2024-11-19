@@ -4,6 +4,11 @@ app = Flask(__name__)
 API_URL = "http://localhost:8000"
 
 @app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/rides')
 def list_rides():
     response = requests.get(f"{API_URL}/rides")
     rides = response.json()["rides"]
@@ -19,7 +24,7 @@ def create_ride():
             "available_seats": int(request.form["available_seats"]),
             "driver_name": request.form["driver_name"]
         }
-        response = requests.post(f"{API_URL}/rides", json=ride_data)
+        requests.post(f"{API_URL}/rides", json=ride_data)
         return redirect(url_for('list_rides'))
     return render_template('create_ride.html')
 
@@ -29,7 +34,7 @@ def book_ride(ride_id):
         "passenger_name": request.form["passenger_name"]
     }
     
-    response = requests.post(
+    requests.post(
         f"{API_URL}/rides/{ride_id}/book",
         json=booking_data
     )
