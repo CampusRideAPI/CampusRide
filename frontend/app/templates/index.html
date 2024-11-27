@@ -1,3 +1,5 @@
+{% extends 'base.html' %} {% block title %}CampusRide - Create New Ride{%
+endblock %} {% block content %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,17 +13,7 @@
     <!-- Navigation -->
     <nav class="bg-white shadow">
       <div class="container px-6 py-4 mx-auto">
-        <div class="flex items-center justify-between">
-          <div class="text-xl font-bold text-blue-600">CampusRide</div>
-          <div>
-            <a
-              href="{{ url_for('list_rides') }}"
-              class="px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              View Rides
-            </a>
-          </div>
-        </div>
+        <div class="flex items-center justify-between"></div>
       </div>
     </nav>
 
@@ -171,3 +163,4 @@
     </footer>
   </body>
 </html>
+{% endblock %}
