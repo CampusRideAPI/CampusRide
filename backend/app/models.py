@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -16,6 +16,8 @@ class Ride(Base):
     created_at = Column(DateTime, default=func.now()) 
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now())
     bookings = relationship("Booking", back_populates="ride")
+    driver_id = Column(Integer, ForeignKey("users.id"))
+    driver = relationship("User", back_populates="rides")
     
     
 class Booking(Base):
@@ -29,7 +31,7 @@ class Booking(Base):
 
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
@@ -37,6 +39,8 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+
+    rides = relationship("Ride", back_populates="driver")
 
     def dict(self):
         return {
