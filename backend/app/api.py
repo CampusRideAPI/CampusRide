@@ -5,7 +5,7 @@ from . import models, schemas
 from .database import get_db
 from typing import Optional
 from .auth_utils import get_current_user
-from .schemas import User
+from .schemas import UserResponse as User
 
 
 

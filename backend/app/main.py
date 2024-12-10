@@ -1,7 +1,7 @@
 # backend/app/main.py
 from fastapi import FastAPI
 # from fastapi.middleware.cors import CORSMiddleware FOR DEBUGGING ONLY
-from . import models, api
+from . import models
 from .database import engine
 from app.auth_router import router as auth_router
 from .api import router as api_router
