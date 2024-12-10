@@ -1,18 +1,24 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import requests
+import os
 app = Flask(__name__)
-API_URL = "http://localhost:8000"
+
+app.secret_key = os.getenv("SECRET_KEY")
+API_URL = "http://127.0.0.1:8000"
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
 
-@app.route('/rides')
+@app.route("/rides", methods=["GET"])
 def list_rides():
-    response = requests.get(f"{API_URL}/rides")
-    rides = response.json()["rides"]
-    return render_template('rides_list.html', rides=rides)
+    response = requests.get(f"{API_URL}/api/rides")
+    if response.status_code == 200:
+        rides = response.json().get("rides", [])
+        return render_template("rides_list.html", rides=rides)
+    else:
+        return f"Failed to fetch rides: {response.status_code}", response.status_code
 
 @app.route('/rides/new', methods=['GET', 'POST'])
 def create_ride():
@@ -28,18 +34,56 @@ def create_ride():
         return redirect(url_for('list_rides'))
     return render_template('create_ride.html')
 
-@app.route('/rides/<int:ride_id>/book', methods=['POST'])
+@app.route("/rides/<int:ride_id>/book", methods=["POST"])
 def book_ride(ride_id):
-    booking_data = {
-        "passenger_name": request.form["passenger_name"]
-    }
+    token = session.get("token")
+    if not token:
+        return redirect(url_for("login"))
     
-    requests.post(
-        f"{API_URL}/rides/{ride_id}/book",
-        json=booking_data
+    headers = {"Authorization": f"Bearer {token}"}
+    response = requests.post(f"{API_URL}/rides/{ride_id}/book", headers=headers)
+
+    if response.status_code == 200:
+        return redirect(url_for("list_rides"))
+    return "Failed to book ride", response.status_code
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        response = requests.post(
+            f"{API_URL}/auth/login",
+            data={"username": username, "password": password},
+            )
+        if response.status_code == 200:
+            session["token"] = response.json()["access_token"]
+            session["username"] = username
+            return redirect(url_for("index"))
+
+        else:
+            return "login failed", 401
+    return render_template("index.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+@app.route("/register", methods=["POST"])
+def register():
+    username = request.form["username"]
+    email = request.form["email"]
+    password = request.form["password"]
+    response = requests.post(
+        f"{API_URL}/auth/register",
+        json={"username": username, "email": email, "password": password},
     )
-    
-    return redirect(url_for('list_rides'))
+    if response.status_code == 200:
+        return redirect(url_for("index"))
+    else:
+        return "Registration failed", 400
 
 
 if __name__ == '__main__':
