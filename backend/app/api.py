@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import get_db
 from typing import Optional
+from .auth_utils import get_current_user
+from .schemas import User
 
 
 
@@ -32,13 +34,14 @@ def get_rides(limit: Optional[int] = None,
 )
 def create_ride(
     payload: schemas.RideCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user) 
 ):
-    db_ride = models.Ride(**payload.model_dump())   # Convert payload to model
-    db.add(db_ride)    # Add ride to database
-    db.commit()     # Commit changes
-    db.refresh(db_ride)     # Refresh the database
-    return db_ride    # Return the ride
+    db_ride = models.Ride(**payload.model_dump(), driver_id=user.id)  
+    db.add(db_ride)  
+    db.commit()     
+    db.refresh(db_ride)   
+    return db_ride 
 
 @router.get( 
 """ Returns specific ride details. """
