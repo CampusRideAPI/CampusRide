@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Datetime
+from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -25,6 +26,16 @@ class Booking(Base):
     passenger_name = Column(String)
     created_at = Column(DateTime, default=func.now())
     ride = relationship("Ride", back_populates="bookings")
+
+
+class User(Base):
+    __tablename__ = "user"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True, nullable=False)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(Datetime, default=datetime.utcnow)
+    updated_at = Column(Datetime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
     def dict(self):
