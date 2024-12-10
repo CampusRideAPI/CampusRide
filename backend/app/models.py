@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Datetime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, DateTime
 from datetime import datetime
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
@@ -34,8 +34,8 @@ class User(Base):
     username = Column(String, unique=True, index=True, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password_hash = Column(String, nullable=False)
-    created_at = Column(Datetime, default=datetime.utcnow)
-    updated_at = Column(Datetime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
     def dict(self):

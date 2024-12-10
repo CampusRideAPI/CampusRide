@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 from pydantic.types import conint
 
 class RideBase(BaseModel):
@@ -27,7 +27,7 @@ class Ride(RideBase):
     updated_at: Optional[datetime]
     
     class Config:
-        orm_mode: True
+        from_attributes = True
         json_encoders = {
             datetime: lambda v: v.strftime("%d.%m.%Y %H:%M") # Date format for JSON
         }
@@ -44,4 +44,38 @@ class Booking(BookingCreate):
     created_at: datetime
     
     class Config:
-        orm_mode: True
+        from_attributes = True
+
+
+class UserBase(BaseModel):
+    username: str
+    email: EmailStr
+
+class UserCreate(UserBase):
+    password: str
+
+class UserResponse(UserBase):
+    id: int
+    
+    class Config:
+        from_attributes = True
+
+
+"""
+CURRENTLY ON HOLD, IF TIME YES
+
+class UserWithRides(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    rides: List[Ride] = []
+
+    class Config:
+        from_attributes: = True
+"""
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class tokenData(BaseModel):
+    username: str | None = None
