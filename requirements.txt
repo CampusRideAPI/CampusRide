@@ -9,6 +9,7 @@ python-jose
 passlib
 python-decouple
 bcrypt
+sqlalchemy
 
 
 
