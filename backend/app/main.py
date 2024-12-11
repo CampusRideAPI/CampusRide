@@ -18,4 +18,3 @@ app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 def root():
     return {"message": "Welcome to CampusRide API"}"""
     
-# TODO BCRYPT EI TOIMI!!!!!

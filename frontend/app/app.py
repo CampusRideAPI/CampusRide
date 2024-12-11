@@ -51,7 +51,7 @@ def book_ride(ride_id):
     payload = {
         "passenger_name": session.get("username", "Anonymous")
     }
-    response = requests.post(f"{API_URL}/api/rides/{ride_id}/book", headers=headers, json=payload)
+    response = requests.post(f"{API_URL}/auth/rides/{ride_id}/book", headers=headers, json=payload)
     if response.status_code == 200:
         return redirect(url_for("list_rides"))
     return f"Failed to book ride: {response.json().get('detail', 'Unknown error')}", response.status_code
