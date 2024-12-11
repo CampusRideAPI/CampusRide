@@ -4,7 +4,7 @@ import os
 app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY")
-API_URL = "https://campusride-8e5fd1289410.herokuapp.com/"
+API_URL = "https://campusride-8e5fd1289410.herokuapp.com"
 
 @app.route('/')
 def index():
