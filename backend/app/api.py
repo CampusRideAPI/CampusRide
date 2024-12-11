@@ -10,7 +10,6 @@ from .schemas import UserResponse as User
 
 auth_router =APIRouter()
 router = APIRouter()
-"""API ENDPOINTS"""
 
 """RIDE SPECIFIC ENDPOINTS"""
 @router.get(
