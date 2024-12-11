@@ -49,7 +49,7 @@ def book_ride(ride_id):
         return redirect(url_for("login"))
     headers = {"Authorization": f"Bearer {token}"}
     payload = {
-        "passenger_name": session.get("username")
+        "passenger_name": session.get("username", "Anonymous")
     }
     response = requests.post(f"{API_URL}/api/rides/{ride_id}/book", headers=headers, json=payload)
     if response.status_code == 200:
