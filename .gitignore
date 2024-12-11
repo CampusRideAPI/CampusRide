@@ -19,7 +19,10 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-
+*.pyc
+__pycache__/
+.env
+migrations/versions/__pycache__/
 # Virtual Environment
 venv/
 ENV/
