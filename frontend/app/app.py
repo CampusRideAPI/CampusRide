@@ -11,7 +11,7 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/rides", methods=["GET"])
+@app.route("/api/rides", methods=["GET"])
 def list_rides():
     response = requests.get(f"{API_URL}/api/rides")
     if response.status_code == 200:
@@ -23,6 +23,9 @@ def list_rides():
 @app.route('/rides/new', methods=['GET', 'POST'])
 def create_ride():
     if request.method == 'POST':
+        if "token" not in session:
+            return redirect(url_for('login'))
+
         ride_data = {
             "departure_location": request.form["departure_location"],
             "arrival_location": request.form["arrival_location"],
@@ -30,8 +33,13 @@ def create_ride():
             "available_seats": int(request.form["available_seats"]),
             "driver_name": request.form["driver_name"]
         }
-        requests.post(f"{API_URL}/rides", json=ride_data)
-        return redirect(url_for('list_rides'))
+        headers = {"Authorization": f"Bearer {session['token']}"}
+        response = requests.post(f"{API_URL}/api/rides", json=ride_data, headers=headers)
+        if response.status_code == 201:
+            return redirect(url_for('list_rides'))
+        else:
+            return f"Failed to create a ride: {response.json().get('detail', 'Unknown error')}", response.status_code
+
     return render_template('create_ride.html')
 
 @app.route("/rides/<int:ride_id>/book", methods=["POST"])
@@ -39,13 +47,14 @@ def book_ride(ride_id):
     token = session.get("token")
     if not token:
         return redirect(url_for("login"))
-    
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.post(f"{API_URL}/rides/{ride_id}/book", headers=headers)
-
+    payload = {
+        "passenger_name": session.get("username")
+    }
+    response = requests.post(f"{API_URL}/api/rides/{ride_id}/book", headers=headers, json=payload)
     if response.status_code == 200:
         return redirect(url_for("list_rides"))
-    return "Failed to book ride", response.status_code
+    return f"Failed to book ride: {response.json().get('detail', 'Unknown error')}", response.status_code
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -58,7 +67,7 @@ def login():
             )
         if response.status_code == 200:
             session["token"] = response.json()["access_token"]
-            session["username"] = username
+            
             return redirect(url_for("index"))
 
         else:
