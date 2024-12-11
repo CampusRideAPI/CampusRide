@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from app.database import SessionLocal
-from app.models import Ride
+from app.models import Ride, User
 
 """DUMMY DATA GENERATION SCRIPT"""
 COMMON_ROUTES = [
@@ -22,18 +22,40 @@ COMMON_ROUTES = [
 ]
 
 REGULAR_DRIVERS = [
-    {"name": "Risto Rautalanka", "routes": [0, 1]}, 
-    {"name": "Aimo Mainio", "routes": [1, 2]},
-    {"name": "Sulo Säihky", "routes": [0, 2]}
+    {"username": "risto", "name": "Risto Rautalanka", "routes": [0, 1]}, 
+    {"username": "aimo", "name": "Aimo Mainio", "routes": [1, 2]},
+    {"username": "sulo", "name": "Sulo Säihky", "routes": [0, 2]}
 ]
+
+def create_users(db):
+    """Ensure regular drivers exist in the database."""
+    for driver in REGULAR_DRIVERS:
+        user = db.query(User).filter(User.username == driver["username"]).first()
+        if not user:
+            user = User(
+                username=driver["username"],
+                email=f"{driver['username']}@example.com",
+                password_hash="dummy_hash"  # Replace with hashed password if needed
+            )
+            db.add(user)
+            print(f"Created user: {driver['username']}")
+    db.commit()
 
 def create_structured_dummy_rides():
     db = SessionLocal()
     start_date = datetime.now()
-    """Dummy dataa 2 päiväksi"""
+    
     try:
+        # Ensure users exist
+        create_users(db)
+
         for day in range(2):
             for driver in REGULAR_DRIVERS:
+                user = db.query(User).filter(User.username == driver["username"]).first()
+                if not user:
+                    print(f"User {driver['username']} not found!")
+                    continue
+
                 for route_index in driver["routes"]:
                     route = COMMON_ROUTES[route_index]
                     
@@ -45,7 +67,8 @@ def create_structured_dummy_rides():
                             arrival_location=route["arrival"],
                             departure_time=ride_time,
                             available_seats=4,  # Standard 4 seats
-                            driver_name=driver["name"]
+                            driver_name=driver["name"],
+                            driver_id=user.id  # Associate ride with user
                         )
                         db.add(ride)
         

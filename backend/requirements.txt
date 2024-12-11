@@ -4,3 +4,11 @@ sqlalchemy
 pydantic
 python-dotenv
 alembic
+email-validator
+python-jose
+passlib
+python-decouple
+bcrypt
+
+
+

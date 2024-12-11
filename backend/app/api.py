@@ -4,9 +4,11 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import get_db
 from typing import Optional
+from .auth_utils import get_current_user
+from .schemas import UserResponse as User
 
 
-
+auth_router =APIRouter()
 router = APIRouter()
 """API ENDPOINTS"""
 
@@ -32,13 +34,14 @@ def get_rides(limit: Optional[int] = None,
 )
 def create_ride(
     payload: schemas.RideCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user) 
 ):
-    db_ride = models.Ride(**payload.model_dump())   # Convert payload to model
-    db.add(db_ride)    # Add ride to database
-    db.commit()     # Commit changes
-    db.refresh(db_ride)     # Refresh the database
-    return db_ride    # Return the ride
+    db_ride = models.Ride(**payload.model_dump(), driver_id=user.id)  
+    db.add(db_ride)  
+    db.commit()     
+    db.refresh(db_ride)   
+    return db_ride 
 
 @router.get( 
 """ Returns specific ride details. """
@@ -97,13 +100,14 @@ def delete_ride(ride_id: int, db: Session = Depends(get_db)):
 
 """BOOKING SPECIFIC ENDPOINTS"""
 
-@router.post(
+@auth_router.post(
     "/rides/{ride_id}/book", response_model=schemas.Booking)
 
 def book_a_ride(
     ride_id: int,
     booking: schemas.BookingCreate,
     db: Session = Depends(get_db)):
+    user=Depends(get_current_user)
     ride = db.query(models.Ride).filter(models.Ride.id == ride_id).first()
     if not ride:
         raise HTTPException(
@@ -118,7 +122,7 @@ def book_a_ride(
         
     db_booking = models.Booking(
         ride_id=ride_id,
-        passenger_name = booking.passenger_name
+        passenger_name = user  
     )
     ride.available_seats -= 1
     db.add(db_booking)
