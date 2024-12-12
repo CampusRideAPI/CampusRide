@@ -143,7 +143,7 @@ campusride/
 │   │   ├── templates/
 │   │   │   ├── base.html             # Optional, only for rendering and reducing copypaste code.
 │   │   │   ├── index.html            # Optional, ride_list.html can be landing page.
-│   │   │   ├── rides_list.html       # List all rides + delete button
+│   │   │   ├── rides_list.html       # List all rides + delete button // delete bTn missing 404.
 │   │   │   └── create_ride.html      # Form with all required fields
 │   │   ├── static/
 │   │   │   └── style.css             # Optional
@@ -242,8 +242,8 @@ git checkout correct-branch
 3. Write clear commit messages
 4. Test your changes before pushing
 5. Ask for help if needed
-
+6. Python is fun, it depends on your mindset :)
 ## Need Help?
 
 - Ask Aleksi about anything directly
-- ?Ask during team meetings?
+- Ask during team meetings
