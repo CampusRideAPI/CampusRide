@@ -96,37 +96,3 @@ def delete_ride(ride_id: int, db: Session = Depends(get_db)):
     db.commit()
     return
 
-
-"""BOOKING SPECIFIC ENDPOINTS"""
-
-@auth_router.post(
-    "/rides/{ride_id}/book", response_model=schemas.Booking)
-
-def book_a_ride(
-    ride_id: int,
-    booking: schemas.BookingCreate,
-    db: Session = Depends(get_db)):
-    user=Depends(get_current_user)
-    ride = db.query(models.Ride).filter(models.Ride.id == ride_id).first()
-    if not ride:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Ride with ID {ride_id} not found"
-        )
-    if ride.available_seats <= 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No available seats for this ride"
-        )
-        
-    db_booking = models.Booking(
-        ride_id=ride_id,
-        passenger_name = user  
-    )
-    ride.available_seats -= 1
-    db.add(db_booking)
-    db.commit()
-    db.refresh(db_booking)
-    return db_booking
-        
-    

@@ -50,7 +50,6 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 @auth_router.post("/rides/{ride_id}/book", response_model=BookingSchema)
 def book_a_ride(
     ride_id: int,
-    booking: BookingCreate,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user) 
 ):
@@ -68,7 +67,7 @@ def book_a_ride(
     
     db_booking = Booking(
         ride_id=ride_id,
-        passenger_name=user.username 
+        passenger_name=user.username,
     )
     ride.available_seats -= 1
     db.add(db_booking)

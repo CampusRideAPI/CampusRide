@@ -37,12 +37,14 @@ class GetRidesSchema(BaseModel):
     
 class BookingCreate(BaseModel):
     passenger_name: str = Field(..., min_length=2, max_length=30)
-    
+    notes: Optional[str] = None
+
+
 class Booking(BookingCreate):
     id: int
     ride_id: int
     created_at: datetime
-    
+
     class Config:
         from_attributes = True
 
@@ -56,6 +58,8 @@ class UserCreate(UserBase):
 
 class UserResponse(UserBase):
     id: int
+    username: str
+    email: str
     
     class Config:
         from_attributes = True

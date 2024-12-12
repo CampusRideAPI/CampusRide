@@ -1,41 +1,48 @@
 from datetime import datetime, timedelta
+
+from sqlalchemy.orm import query
 from app.database import SessionLocal
 from app.models import Ride, User
 
 """DUMMY DATA GENERATION SCRIPT"""
 COMMON_ROUTES = [
     {
-        "departure": "Kupittaa CAMPUS",
-        "arrival": "Centrum, Keskusta",
+        "departure": "221B Baker ST.",
+        "arrival": "Moriarty Lane",
         "typical_times": [9, 17]  # 9 AM and 5 PM
     },
     {
-        "departure": "Centrum, Keskusta",
-        "arrival": "Kupittaa CAMPUS",
+        "departure": "Shrine Lane",
+        "arrival": "Mordor Heights",
         "typical_times": [8, 16]  # 8 AM and 4 PM
     },
     {
-        "departure": "Ylioppilaskylä",
-        "arrival": "Kupittaa CAMPUS",
+        "departure": "Never Gonna St.",
+        "arrival": "Give You Up Ave.",
         "typical_times": [10, 14]  # 10 AM and 2 PM
+    },
+    {
+        "departure": "Dark Side Ave.",
+        "arrival": "Skylwalker Way.",
+        "typical_times": [8, 17]
     }
 ]
 
 REGULAR_DRIVERS = [
-    {"username": "risto", "name": "Risto Rautalanka", "routes": [0, 1]}, 
-    {"username": "aimo", "name": "Aimo Mainio", "routes": [1, 2]},
-    {"username": "sulo", "name": "Sulo Säihky", "routes": [0, 2]}
+    {"username": "ric_o", "name": "Rick O'Shea", "routes": [0, 1]}, 
+    {"username": "freeman", "name": "Vroomin'Freeman", "routes": [1, 0]},
+    {"username": "rick", "name": "Rick Astley", "routes": [2, 2]},
+    {"username": "darth", "name": "Darth Rader", "routes": [3, 3]}
 ]
 
 def create_users(db):
-    """Ensure regular drivers exist in the database."""
     for driver in REGULAR_DRIVERS:
         user = db.query(User).filter(User.username == driver["username"]).first()
         if not user:
             user = User(
                 username=driver["username"],
-                email=f"{driver['username']}@example.com",
-                password_hash="dummy_hash"  # Replace with hashed password if needed
+                email=f"{driver['username']}@alfredospizza.org",
+                password_hash="dummy_hash"
             )
             db.add(user)
             print(f"Created user: {driver['username']}")

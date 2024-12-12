@@ -47,7 +47,8 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> UserResponse:
                 detail="Invalid token",
                 headers={"WWW-Authenticate": "Bearer"},
             )
-        # Return a simple UserResponse object
+            
+            # Hardcoded email + id for testing
         return UserResponse(username=username, email="placeholder@example.com", id=1)
     except JWTError:
         raise HTTPException(

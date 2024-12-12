@@ -28,6 +28,7 @@ class Booking(Base):
     passenger_name = Column(String)
     created_at = Column(DateTime, default=func.now())
     ride = relationship("Ride", back_populates="bookings")
+   # note = Column(String, nullable=True)
 
 
 class User(Base):
