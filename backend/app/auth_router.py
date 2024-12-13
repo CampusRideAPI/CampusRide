@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.database import get_db 
 from app.models import User, Ride, Booking
-from app.schemas import UserCreate, UserResponse, Token, Booking as BookingSchema, BookingCreate
+from app.schemas import UserCreate, UserResponse, Token, Booking as BookingSchema
 from app.auth_utils import hash_password, verify_password, generate_access_token, decode_access_token
 
 auth_router = APIRouter()

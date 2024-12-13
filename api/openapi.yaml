@@ -1,27 +1,43 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
-  title: CampusRide API
-  version: 1.0.0
-  description: A simple ride-sharing service for students
-
+  title: CampusRide
+  version: 0.1.0
 paths:
-  /rides/:
+  /api/rides:
     get:
-      summary: List all rides
+      tags:
+        - Rides and Bookings
+      summary: Get Rides
+      operationId: get_rides_api_rides_get
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            anyOf:
+              - type: integer
+              - type: null
+            title: Limit
       responses:
         "200":
-          description: List of all rides
+          description: Successful Response
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  rides:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Ride"
+                $ref: "#/components/schemas/GetRidesSchema"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
     post:
-      summary: Create a new ride
+      tags:
+        - Rides and Bookings
+      summary: Create Ride
+      operationId: create_ride_api_rides_post
+      security:
+        - OAuth2PasswordBearer: []
       requestBody:
         required: true
         content:
@@ -30,41 +46,55 @@ paths:
               $ref: "#/components/schemas/RideCreate"
       responses:
         "201":
-          description: Ride created successfully
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ride"
         "422":
           description: Validation Error
-
-  /rides/{ride_id}:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /api/rides/{ride_id}:
     get:
-      summary: Get a specific ride
+      tags:
+        - Rides and Bookings
+      summary: Get Ride
+      operationId: get_ride_api_Returns_specific_ride_details___rides__ride_id__get
       parameters:
         - name: ride_id
           in: path
           required: true
           schema:
             type: integer
+            title: Ride Id
       responses:
         "200":
-          description: Ride details
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ride"
-        "404":
-          description: Ride not found
-
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
     put:
-      summary: Update a ride
+      tags:
+        - Rides and Bookings
+      summary: Update Ride
+      operationId: update_ride_api_rides__ride_id__put
       parameters:
         - name: ride_id
           in: path
           required: true
           schema:
             type: integer
+            title: Ride Id
       requestBody:
         required: true
         content:
@@ -73,62 +103,259 @@ paths:
               $ref: "#/components/schemas/RideUpdate"
       responses:
         "200":
-          description: Ride updated successfully
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Ride"
-        "404":
-          description: Ride not found
         "422":
           description: Validation Error
-
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
     delete:
-      summary: Delete a ride
+      tags:
+        - Rides and Bookings
+      summary: Delete Ride
+      operationId: delete_ride_api_rides__ride_id__delete
       parameters:
         - name: ride_id
           in: path
           required: true
           schema:
             type: integer
+            title: Ride Id
       responses:
         "204":
-          description: Ride deleted successfully
-        "404":
-          description: Ride not found
-
-  /rides/{ride_id}/book:
+          description: Successful Response
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /auth/register:
     post:
-      summary: Book a ride
-      parameters:
-        - name: ride_id
-          in: path
-          required: true
-          schema:
-            type: integer
+      tags:
+        - Authentication
+      summary: Register User
+      operationId: register_user_auth_register_post
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BookingCreate"
+              $ref: "#/components/schemas/UserCreate"
       responses:
-        "201":
-          description: Booking created successfully
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Login User
+      operationId: login_user_auth_login_post
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Body_login_user_auth_login_post"
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
+  /auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get Current User
+      operationId: get_current_user_auth_me_get
+      security:
+        - OAuth2PasswordBearer: []
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+  /auth/rides/{ride_id}/book:
+    post:
+      tags:
+        - Authentication
+      summary: Book A Ride
+      operationId: book_a_ride_auth_rides__ride_id__book_post
+      security:
+        - OAuth2PasswordBearer: []
+      parameters:
+        - name: ride_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            title: Ride Id
+      responses:
+        "200":
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Booking"
-        "404":
-          description: Ride not found
-        "400":
-          description: No seats available
         "422":
           description: Validation Error
-
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HTTPValidationError"
 components:
   schemas:
-    RideBase:
+    Body_login_user_auth_login_post:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        grant_type:
+          anyOf:
+            - type: string
+              pattern: password
+            - type: null
+          title: Grant Type
+        username:
+          type: string
+          title: Username
+        password:
+          type: string
+          title: Password
+        scope:
+          type: string
+          title: Scope
+          default: ""
+        client_id:
+          anyOf:
+            - type: string
+            - type: null
+          title: Client Id
+        client_secret:
+          anyOf:
+            - type: string
+            - type: null
+          title: Client Secret
+    Booking:
+      type: object
+      required:
+        - passenger_name
+        - id
+        - ride_id
+        - created_at
+      properties:
+        passenger_name:
+          type: string
+          maxLength: 30
+          minLength: 2
+          title: Passenger Name
+        notes:
+          anyOf:
+            - type: string
+            - type: null
+          title: Notes
+        id:
+          type: integer
+          title: Id
+        ride_id:
+          type: integer
+          title: Ride Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+    GetRidesSchema:
+      type: object
+      required:
+        - rides
+      properties:
+        rides:
+          type: array
+          items:
+            $ref: "#/components/schemas/Ride"
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/ValidationError"
+    Ride:
+      type: object
+      required:
+        - departure_location
+        - arrival_location
+        - departure_time
+        - available_seats
+        - driver_name
+        - id
+        - created_at
+        - updated_at
+      properties:
+        departure_location:
+          type: string
+          maxLength: 100
+          minLength: 2
+          title: Departure Location
+        arrival_location:
+          type: string
+          maxLength: 100
+          minLength: 2
+          title: Arrival Location
+        departure_time:
+          type: string
+          format: date-time
+          title: Departure Time
+        available_seats:
+          type: integer
+          minimum: 0
+          maximum: 8
+          title: Available Seats
+        driver_name:
+          type: string
+          maxLength: 30
+          minLength: 2
+          title: Driver Name
+        id:
+          type: integer
+          title: Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: null
+          title: Updated At
+    RideCreate:
       type: object
       required:
         - departure_location
@@ -139,96 +366,137 @@ components:
       properties:
         departure_location:
           type: string
-          minLength: 2
           maxLength: 100
+          minLength: 2
+          title: Departure Location
         arrival_location:
           type: string
-          minLength: 2
           maxLength: 100
+          minLength: 2
+          title: Arrival Location
         departure_time:
           type: string
           format: date-time
-          example: "2024-11-17 15:01"
+          title: Departure Time
         available_seats:
           type: integer
-          minimum: 1
+          minimum: 0
           maximum: 8
+          title: Available Seats
         driver_name:
           type: string
+          maxLength: 30
           minLength: 2
-          maxLength: 50
-
-    RideCreate:
-      allOf:
-        - $ref: "#/components/schemas/RideBase"
-
+          title: Driver Name
     RideUpdate:
       type: object
+      required:
+        - departure_time
+        - available_seats
       properties:
         departure_location:
-          type: string
-          minLength: 2
-          maxLength: 100
+          anyOf:
+            - type: string
+              maxLength: 100
+              minLength: 2
+            - type: null
+          title: Departure Location
         arrival_location:
-          type: string
-          minLength: 2
-          maxLength: 100
+          anyOf:
+            - type: string
+              maxLength: 100
+              minLength: 2
+            - type: null
+          title: Arrival Location
         departure_time:
-          type: string
-          format: date-time
-          example: "2024-11-17 15:01"
+          anyOf:
+            - type: string
+              format: date-time
+            - type: null
+          title: Departure Time
         available_seats:
-          type: integer
-          minimum: 1
-          maximum: 8
+          anyOf:
+            - type: integer
+              minimum: 0
+              maximum: 8
+            - type: null
+          title: Available Seats
         driver_name:
-          type: string
-          minLength: 2
-          maxLength: 50
-
-    Ride:
-      allOf:
-        - $ref: "#/components/schemas/RideBase"
-        - type: object
-          required:
-            - id
-            - created_at
-            - updated_at
-          properties:
-            id:
-              type: integer
-            created_at:
-              type: string
-              format: date-time
-            updated_at:
-              type: string
-              format: date-time
-              nullable: true
-
-    BookingCreate:
+          anyOf:
+            - type: string
+              maxLength: 30
+              minLength: 2
+            - type: null
+          title: Driver Name
+    Token:
       type: object
       required:
-        - passenger_name
+        - access_token
+        - token_type
       properties:
-        passenger_name:
+        access_token:
           type: string
-          minLength: 2
-          maxLength: 30
-
-    Booking:
+          title: Access Token
+        token_type:
+          type: string
+          title: Token Type
+    UserCreate:
       type: object
       required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          format: email
+          title: Email
+        password:
+          type: string
+          title: Password
+    UserResponse:
+      type: object
+      required:
+        - username
+        - email
         - id
-        - ride_id
-        - passenger_name
-        - created_at
       properties:
+        username:
+          type: string
+          title: Username
+        email:
+          type: string
+          title: Email
         id:
           type: integer
-        ride_id:
-          type: integer
-        passenger_name:
+          title: Id
+    ValidationError:
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          title: Location
+        msg:
           type: string
-        created_at:
+          title: Message
+        type:
           type: string
-          format: date-time
+          title: Error Type
+  securitySchemes:
+    OAuth2PasswordBearer:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: auth/login
+          scopes: {}

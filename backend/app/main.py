@@ -8,13 +8,15 @@ from .api import router as api_router
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="CampusRide API", debug=False) 
+app = FastAPI(title="CampusRide", debug=False) 
 
 
 app.include_router(api_router, prefix="/api", tags=["Rides and Bookings"])
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 
-"""@app.get("/")
+"""
+@app.get("/")
 def root():
-    return {"message": "Welcome to CampusRide API"}"""
+    return {"message": "Welcome to CampusRide API"}
+"""
     
